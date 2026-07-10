@@ -2,6 +2,9 @@
 # MyFriendBen Application Status Tracker
 
 
+applications = []
+
+
 class Application:
 
     def __init__(self, program, status, date):
@@ -23,28 +26,123 @@ class Application:
 
 
 
-# Create a SNAP application
+# Add Application
 
-snap_application = Application(
-    "SNAP Food Assistance",
-    "Submitted",
-    "July 8, 2026"
-)
+def add_application():
+
+    print("\nAdd New Application")
+
+    program = input("Benefit Program: ")
+
+    status = input("Application Status: ")
+
+    date = input("Application Date: ")
+
+    application = Application(
+        program,
+        status,
+        date
+    )
+
+    applications.append(application)
+
+    print("Application added successfully!")
 
 
-# Show current status
 
-snap_application.show_application()
+# View Applications
+
+def view_applications():
+
+    print("\n==========================")
+    print("BenefitBridge AI Dashboard")
+    print("==========================")
+
+    if len(applications) == 0:
+        print("No applications found.")
+        return
+
+    for index, app in enumerate(applications, start=1):
+
+        print(f"\nApplication #{index}")
+
+        app.show_application()
 
 
-# Update application status
 
-snap_application.update_status("Approved")
+# Update Application
+
+def update_application():
+
+    view_applications()
+
+    if len(applications) == 0:
+        return
 
 
-print("Updated Application Status:")
+    choice = int(
+        input("\nWhich application would you like to update? ")
+    )
 
 
-# Show new status
+    new_status = input("Enter new status: ")
 
-snap_application.show_application()
+
+    applications[choice - 1].update_status(new_status)
+
+
+    print("Status updated!")
+
+
+
+# Menu
+
+def show_menu():
+
+    print("\n==============================")
+    print("       BenefitBridge AI")
+    print("==============================")
+    print("1. Add Application")
+    print("2. View Applications")
+    print("3. Update Status")
+    print("4. Exit")
+
+
+
+# Main Program
+
+running = True
+
+
+while running:
+
+    show_menu()
+
+    choice = input("\nChoose an option: ")
+
+
+    if choice == "1":
+
+        add_application()
+
+
+    elif choice == "2":
+
+        view_applications()
+
+
+    elif choice == "3":
+
+        update_application()
+
+
+    elif choice == "4":
+
+        print("Goodbye!")
+
+        running = False
+
+
+    else:
+
+        print("Invalid option. Please try again.")
