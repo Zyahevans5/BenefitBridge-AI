@@ -1,6 +1,7 @@
 # BenefitBridge AI
 # MyFriendBen Application Status Tracker
 
+import json
 
 applications = []
 
@@ -24,18 +25,20 @@ class Application:
         print("Applied Date:", self.date)
         print("---------------------")
 
+from application import Application
+from storage import save_applications, load_applications
+from menu import show_menu
 
+
+applications = load_applications()
 
 # Add Application
-
 def add_application():
 
     print("\nAdd New Application")
 
     program = input("Benefit Program: ")
-
     status = input("Application Status: ")
-
     date = input("Application Date: ")
 
     application = Application(
@@ -46,17 +49,15 @@ def add_application():
 
     applications.append(application)
 
+    save_applications(applications)
+
     print("Application added successfully!")
 
 
-
 # View Applications
-
 def view_applications():
 
-    print("\n==========================")
-    print("BenefitBridge AI Dashboard")
-    print("==========================")
+    print("\nBenefitBridge AI Dashboard")
 
     if len(applications) == 0:
         print("No applications found.")
@@ -69,48 +70,23 @@ def view_applications():
         app.show_application()
 
 
-
 # Update Application
-
 def update_application():
 
     view_applications()
 
-    if len(applications) == 0:
-        return
+    choice = int(input("\nWhich application? "))
 
-
-    choice = int(
-        input("\nWhich application would you like to update? ")
-    )
-
-
-    new_status = input("Enter new status: ")
-
+    new_status = input("New status: ")
 
     applications[choice - 1].update_status(new_status)
 
+    save_applications(applications)
 
-    print("Status updated!")
-
-
-
-# Menu
-
-def show_menu():
-
-    print("\n==============================")
-    print("       BenefitBridge AI")
-    print("==============================")
-    print("1. Add Application")
-    print("2. View Applications")
-    print("3. Update Status")
-    print("4. Exit")
-
+    print("Updated!")
 
 
 # Main Program
-
 running = True
 
 
@@ -145,4 +121,5 @@ while running:
 
     else:
 
-        print("Invalid option. Please try again.")
+        print("Invalid choice")
+
