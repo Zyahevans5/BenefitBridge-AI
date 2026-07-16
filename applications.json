@@ -1,0 +1,94 @@
+[
+    {
+        "program": "SNAP",
+        "status": "Pending Review",
+        "date": "2026-07-15",
+        "notes": "",
+        "timeline": [
+            "2026-07-15 - Application Created",
+            "2026-07-15 - Status changed to Pending Review"
+        ],
+        "documents": [
+            {
+                "name": "Photo ID",
+                "completed": true
+            },
+            {
+                "name": "Proof of Income",
+                "completed": false
+            },
+            {
+                "name": "Proof of Address",
+                "completed": false
+            },
+            {
+                "name": "Utility Bill",
+                "completed": false
+            }
+        ]
+    },
+    {
+        "program": "Medicaid",
+        "status": "Approved",
+        "date": "2026-07-15",
+        "notes": "",
+        "timeline": [
+            "2026-07-15 - Application Created",
+            "2026-07-15 - Status changed to Approved"
+        ],
+        "documents": [
+            {
+                "name": "Photo ID",
+                "completed": false
+            },
+            {
+                "name": "Proof of Residency",
+                "completed": false
+            },
+            {
+                "name": "Proof of Income",
+                "completed": true
+            },
+            {
+                "name": "Social Security Number",
+                "completed": true
+            },
+            {
+                "name": "Birth Certificate",
+                "completed": false
+            }
+        ]
+    },
+    {
+        "program": "CHIP",
+        "status": "Approved",
+        "date": "2026-07-15",
+        "notes": "",
+        "timeline": [
+            "2026-07-15 - Application Created",
+            "2026-07-15 - Status changed to Approved"
+        ],
+        "documents": [
+            {
+                "name": "Child's Birth Certificate",
+                "completed": false
+            },
+            {
+                "name": "Proof of Income",
+                "completed": true
+            },
+            {
+                "name": "Proof of Residency",
+                "completed": true
+            },
+            {
+                "name": "Parent/Guardian ID",
+                "completed": false
+            },
+            {
+                "name": "Social Security Number",
+                "completed": true
+            }
+        ]
+    }
+]
