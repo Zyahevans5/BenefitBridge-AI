@@ -6,9 +6,6 @@ from application import Application
 from storage import save_applications, load_applications
 
 applications = load_applications()
-if "message" in st.session_state:
-    st.success(st.session_state["message"])
-    del st.session_state["message"]
 # -----------------------------
 # Page Setup
 # -----------------------------
@@ -119,6 +116,17 @@ elif page == "➕ Add Application":
 
     st.title("➕ Add Application")
 
+    st.session_state.setdefault("add_message", "")
+
+    if st.session_state["add_message"]:
+        message_col, close_col = st.columns([12, 1])
+        with message_col:
+            st.success(st.session_state["add_message"])
+        with close_col:
+            if st.button("Close", key="close_add_message"):
+                st.session_state["add_message"] = ""
+                st.rerun()
+
 
     program = st.selectbox(
         "Benefit Program",
@@ -144,27 +152,26 @@ elif page == "➕ Add Application":
 
 
     if st.button("Save Application"):
+        new_application = Application(
+            program,
+            status,
+            str(application_date)
+        )
 
-     new_application = Application(
-        program,
-        status,
-        str(application_date)
-    )
+        new_application.add_timeline_event(
+            f"{application_date} - Application Created"
+        )
 
-    new_application.add_timeline_event(
-        f"{application_date} - Application Created"
-    )
+        if program in BENEFITS:
+            for document in BENEFITS[program]["documents"]:
+                new_application.add_document(document)
 
-    if program in BENEFITS:
-        for document in BENEFITS[program]["documents"]:
-            new_application.add_document(document)
+        applications.append(new_application)
 
-    applications.append(new_application)
+        save_applications(applications)
 
-    save_applications(applications)
-
-    st.session_state["message"] = "✅ Application saved successfully!"
-    st.rerun()
+        st.session_state["add_message"] = "✅ Application saved successfully!"
+        st.rerun()
 
 # =====================================================
 # MY APPLICATIONS
@@ -173,6 +180,27 @@ elif page == "➕ Add Application":
 elif page == "📋 My Applications":
 
     st.title("📋 My Applications")
+
+    st.session_state.setdefault("status_update_message", "")
+    st.session_state.setdefault("delete_message", "")
+
+    if st.session_state["delete_message"]:
+        delete_col, delete_close_col = st.columns([12, 1])
+        with delete_col:
+            st.success(st.session_state["delete_message"])
+        with delete_close_col:
+            if st.button("Close", key="close_delete_message"):
+                st.session_state["delete_message"] = ""
+                st.rerun()
+
+    if st.session_state["status_update_message"]:
+        message_col, close_col = st.columns([12, 1])
+        with message_col:
+            st.success(st.session_state["status_update_message"])
+        with close_col:
+            if st.button("Close", key="close_status_update_message"):
+                st.session_state["status_update_message"] = ""
+                st.rerun()
 
 
     search = st.text_input(
@@ -262,6 +290,7 @@ elif page == "📋 My Applications":
 
 
                 if app.program == selected_program:
+                    previous_status = app.status
 
 
                     app.update_status(
@@ -273,14 +302,16 @@ elif page == "📋 My Applications":
                         f"{date.today()} - Status changed to {new_status}"
                     )
 
+                    st.session_state["status_update_message"] = (
+                        f"✅ Updated {app.program}: {previous_status} -> {new_status}"
+                    )
+                    break
+
 
             save_applications(
                 applications
             )
-
-          
-        st.session_state["message"] = "✅ Application status updated successfully!"
-        st.rerun()
+            st.rerun()
 
 
         st.subheader(
@@ -307,6 +338,8 @@ elif page == "📋 My Applications":
                 selected_delete
             )
 
+            deleted_app = applications[index]
+
 
             applications.pop(
                 index
@@ -316,10 +349,10 @@ elif page == "📋 My Applications":
             save_applications(
                 applications
             )
-
-
-    st.session_state["message"] = "🗑️ Application deleted successfully!"
-    st.rerun()
+            st.session_state["delete_message"] = (
+                f"🗑️ Deleted {deleted_app.program} ({deleted_app.status})."
+            )
+            st.rerun()
 
 
 
@@ -475,6 +508,16 @@ elif page == "📄 Documents":
 
     st.title("📄 Document Checklist")
 
+    st.session_state.setdefault("documents_message", "")
+    if st.session_state["documents_message"]:
+        message_col, close_col = st.columns([12, 1])
+        with message_col:
+            st.success(st.session_state["documents_message"])
+        with close_col:
+            if st.button("Close", key="close_documents_message"):
+                st.session_state["documents_message"] = ""
+                st.rerun()
+
 
     if not applications:
 
@@ -522,11 +565,9 @@ elif page == "📄 Documents":
 
 
         if st.button("Save Documents"):
-
-         save_applications(applications)
-
-    st.session_state["message"] = "📄 Documents saved successfully!"
-    st.rerun()
+            save_applications(applications)
+            st.session_state["documents_message"] = "📄 Documents saved successfully!"
+            st.rerun()
 
 # =====================================================
 # AI ASSISTANT
